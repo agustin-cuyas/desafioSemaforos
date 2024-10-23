@@ -2,16 +2,17 @@
 
 long int timerPrincipal = 1;
 long int timerSecundaria = 1;
-short int sensor = 0;
+bool sensor = 0;
+char opcion;
 
-void cambiarSemaforo(Estado* estado, short int verde, short int amarillo, short int rojo)
+void cambiarSemaforo(Estado* estado, bool verde, bool amarillo, bool rojo)
 {
     (*estado).verde=verde;
     (*estado).amarillo=amarillo;
     (*estado).rojo=rojo;
 }
 
-void semaforoPrincipal(short int clock, Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal)
+void semaforoPrincipal(bool clock, Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal)
 {
     
     if (clock == 1)
@@ -23,8 +24,13 @@ void semaforoPrincipal(short int clock, Estado* estadoPrincipal, Estado* estadoA
 
         if(timerPrincipal == (tiempoPrincipal.verde - 5) && clock == 1)
         {    
-            printf("Hay autos en la carretera secundaria? (1: Sí, 0: No):");    //pregunta solo una vez
-            scanf("%d", &sensor);
+            do{
+                printf("Hay autos en la carretera secundaria? (s/n): ");
+                opcion = getchar();
+            }while(opcion != 's' && opcion != 'n');
+            
+            sensor = opcion == 's' ? 1 : 0;
+            while(getchar() != '\n');      //limpio el buffer
         }
         // Extender el tiempo en verde si no hay vehículos en la carretera secundaria
         float tiempoVerde = sensor ? tiempoPrincipal.verde : tiempoPrincipal.verde + 15;    //habria que crear una constante para 15
@@ -63,7 +69,7 @@ void semaforoPrincipal(short int clock, Estado* estadoPrincipal, Estado* estadoA
     }
 }
 
-void semaforoSecundario(short int clock, Estado* estadoSecundaria, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria)
+void semaforoSecundario(bool clock, Estado* estadoSecundaria, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria)
 {
     if (clock == 1)
         timerSecundaria++;

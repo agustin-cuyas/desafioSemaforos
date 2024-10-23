@@ -7,8 +7,7 @@ ver si sensor se puede pedir como char para que quede mas lindo
 
 int main()
 {
-    short int clock = 0;
-    short int sensor = 0;
+    bool clock = 0;
     Tiempo tiempoPrincipal;
     Tiempo tiempoSecundaria;
 
@@ -19,7 +18,7 @@ int main()
     Estado estadoAnteriorSecundaria;
 
 
-    tiempoPrincipal.verde = 35; //35
+    tiempoPrincipal.verde = 30; //30
     tiempoPrincipal.amarillo = 5; //5
     
     tiempoSecundaria.verde = 15; //15
