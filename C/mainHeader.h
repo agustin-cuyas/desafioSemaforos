@@ -21,6 +21,12 @@ typedef struct
     bool rojo;
 }Estado;
 
+typedef enum
+{
+    VERDE,
+    AMARILLO,
+    ROJO
+} Color;
 
 void cambiarSemaforo(Estado* estado, bool verde, bool amarillo, bool rojo);
 void semaforoPrincipal(bool clock, Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal);

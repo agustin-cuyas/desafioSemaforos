@@ -49,7 +49,7 @@ int main()
         semaforoPrincipal(clock, &estadoActualPrincipal, &estadoAnteriorPrincipal, &estadoActualSecundaria, tiempoPrincipal);        
         semaforoSecundario(clock, &estadoActualSecundaria,&estadoAnteriorSecundaria, &estadoActualPrincipal, tiempoSecundaria);
 
-        clock = clock == 1 ? 0 : 1;
+        clock = !clock;
         Sleep(500);
         system("cls");
     }
