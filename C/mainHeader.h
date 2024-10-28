@@ -4,22 +4,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <windows.h> //para sleep()
+#include <windows.h> // para Sleep()
 
 typedef struct 
 {
     float verde;
     float amarillo;
     float rojo;
-
-}Tiempo;
+} Tiempo;
 
 typedef struct
 {
     bool verde;
     bool amarillo;
     bool rojo;
-}Estado;
+} Estado;
 
 typedef enum
 {
@@ -29,7 +28,10 @@ typedef enum
 } Color;
 
 void cambiarSemaforo(Estado* estado, bool verde, bool amarillo, bool rojo);
-void semaforoPrincipal(bool clock, Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal);
-void semaforoSecundario(bool clock, Estado* estadoSecundario, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria);
+void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal);
+void semaforoSecundario(Estado* estadoSecundario, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria);
+DWORD WINAPI hiloSemaforoPrincipal(LPVOID lpParam);
+DWORD WINAPI hiloSemaforoSecundario(LPVOID lpParam);
+extern HANDLE semaforoSecundarioHandle; 
 
 #endif
