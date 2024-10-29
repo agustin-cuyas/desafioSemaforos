@@ -28,13 +28,9 @@ typedef enum
 } Color;
 
 void cambiarSemaforo(Estado* estado, bool verde, bool amarillo, bool rojo);
-void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal);
-void semaforoSecundario(Estado* estadoSecundario, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria);
-DWORD WINAPI hiloSemaforoPrincipal(LPVOID lpParam);
-DWORD WINAPI hiloSemaforoSecundario(LPVOID lpParam);
-//extern HANDLE semaforoSecundarioHandle; 
-extern HANDLE hiloSecundarioHandle;
-//extern HANDLE hiloPrincipalHandle;
+void semaforoPrincipal(bool clk, Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal, Estado* estadoSecundario, Tiempo tiempoPrincipal);
+void semaforoSecundario(bool clk, Estado* estadoSecundario, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria);
+DWORD WINAPI hiloPrincipal(LPVOID lpParam);
 
 
 

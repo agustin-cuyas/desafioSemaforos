@@ -9,29 +9,20 @@ Estado estadoActualSecundaria;
 Estado estadoAnteriorPrincipal;
 Estado estadoAnteriorSecundaria;
 
-//HANDLE hiloPrincipalHandle;
-HANDLE hiloSecundarioHandle;
+bool clk = 0;
 
-//HANDLE semaforoSecundarioHandle;
-
-DWORD WINAPI hiloSemaforoPrincipal(LPVOID lpParam) {    
+DWORD WINAPI hiloPrincipal(LPVOID lpParam) {    
     while (1) {
-        semaforoPrincipal(&estadoActualPrincipal, &estadoAnteriorPrincipal, &estadoActualSecundaria, tiempoPrincipal);
-        Sleep(1000);
-        system("cls");
-    }
-}
-
-DWORD WINAPI hiloSemaforoSecundario(LPVOID lpParam) {
-    while (1) {
-        semaforoSecundario(&estadoActualSecundaria,&estadoAnteriorSecundaria, &estadoActualPrincipal, tiempoSecundaria);
-        Sleep(1000);
+        semaforoPrincipal(clk, &estadoActualPrincipal, &estadoAnteriorPrincipal, &estadoActualSecundaria, tiempoPrincipal);
+        semaforoSecundario(clk, &estadoActualSecundaria,&estadoAnteriorSecundaria, &estadoActualPrincipal, tiempoSecundaria);
+        clk = !clk;
+        Sleep(500);
         system("cls");
     }
 }
 
 int main() {
-    HANDLE hiloPrincipal, hiloSecundario;   //pthread_t hiloPrincipal
+    HANDLE hilo;   //pthread_t hiloPrincipal
     
     cambiarSemaforo(&estadoActualPrincipal, 1, 0, 0);
     cambiarSemaforo(&estadoActualSecundaria, 0, 0, 1);
@@ -47,7 +38,7 @@ int main() {
         scanf("%f", &tiempoPrincipal.amarillo);
     } while (tiempoPrincipal.amarillo < 1);
 
-    printf("Permanecera en rojo hasta que el otro termine su ciclo.\n");
+    printf("Permanecera en rojo hasta que el otro termine su ciclo.\n\n");
     
     
     printf("Semaforo calle secundaria\n");
@@ -64,21 +55,13 @@ int main() {
     system("cls");
     while(getchar() != '\n');      //limpio el buffer
 
-    //crear hilos
-    hiloPrincipal = CreateThread(NULL, 0, hiloSemaforoPrincipal, NULL, 0, NULL);    //pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
+    //crear hilo
+    hilo = CreateThread(NULL, 0, hiloPrincipal, NULL, 0, NULL);    //pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
 
-    hiloSecundario = CreateThread(NULL, 0, hiloSemaforoSecundario, NULL, 0, NULL);
-
-    //hiloPrincipalHandle = hiloPrincipal;
-    hiloSecundarioHandle = hiloSecundario;
-
-    WaitForSingleObject(hiloPrincipal, INFINITE);
-    WaitForSingleObject(hiloSecundario, INFINITE);
+    WaitForSingleObject(hilo, INFINITE);
 
     //limpia los hilos
-    CloseHandle(hiloPrincipal);
-    CloseHandle(hiloSecundario);
-    CloseHandle(hiloSecundarioHandle);
+    CloseHandle(hilo);
 
     return 0;
 }
