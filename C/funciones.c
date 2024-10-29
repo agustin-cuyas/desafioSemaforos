@@ -5,6 +5,7 @@ long int timerSecundaria = 0;
 bool sensor = false;
 char opcion;   
 
+
 void cambiarSemaforo(Estado* estado, bool verde, bool amarillo, bool rojo)
 {
     estado->verde = verde;
@@ -23,6 +24,9 @@ void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal,
             printf("Carretera principal en verde, timer: %ld \n", timerPrincipal);
 
             if (timerPrincipal == (tiempoPrincipal.verde - 3)) {
+                //detener el otro 
+                SuspendThread(hiloSecundarioHandle);
+                //SuspendThread(hiloPrincipalHandle);
                 do {
                     printf("Hay autos en la carretera secundaria? (s/n): ");
                     opcion = getchar();
@@ -30,7 +34,9 @@ void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal,
                 
                 sensor = opcion == 's' ? 1 : 0;
                 while (getchar() != '\n'); // limpiar el buffer
-                SetEvent(semaforoSecundarioHandle); //permite continuar al otro hilo
+                ResumeThread(hiloSecundarioHandle);
+                //ResumeThread(hiloPrincipalHandle);
+                
             }
             
             float tiempoVerde = sensor ? tiempoPrincipal.verde : tiempoPrincipal.verde + 15;
@@ -50,7 +56,7 @@ void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal,
                     cambiarSemaforo(estadoPrincipal, 0, 0, 1);
                 if((*estadoAnteriorPrincipal).rojo == 1)
                     cambiarSemaforo(estadoPrincipal, 1, 0, 0);
-                SetEvent(semaforoSecundarioHandle);
+                //SetEvent(semaforoSecundarioHandle);
             }
             break;
 
@@ -70,7 +76,6 @@ void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal,
 
 void semaforoSecundario(Estado* estadoSecundaria, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria)
 {
-    WaitForSingleObject(semaforoSecundarioHandle, INFINITE);
     timerSecundaria++;
 
     Color color = (*estadoSecundaria).verde ? VERDE : ((*estadoSecundaria).amarillo ? AMARILLO : ROJO);
@@ -99,7 +104,7 @@ void semaforoSecundario(Estado* estadoSecundaria, Estado* estadoAnteriorSecundar
 
         case ROJO:
             printf("Carretera secundaria en rojo, timer: %i \n", timerSecundaria);
-
+            
             if((*estadoPrincipal).rojo == 1)
             { 
                 timerSecundaria = 1;
@@ -108,5 +113,4 @@ void semaforoSecundario(Estado* estadoSecundaria, Estado* estadoAnteriorSecundar
             }
             break;
     }
-    ResetEvent(semaforoSecundarioHandle);
 }

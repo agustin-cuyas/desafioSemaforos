@@ -32,6 +32,10 @@ void semaforoPrincipal(Estado* estadoPrincipal, Estado* estadoAnteriorPrincipal,
 void semaforoSecundario(Estado* estadoSecundario, Estado* estadoAnteriorSecundaria, Estado* estadoPrincipal, Tiempo tiempoSecundaria);
 DWORD WINAPI hiloSemaforoPrincipal(LPVOID lpParam);
 DWORD WINAPI hiloSemaforoSecundario(LPVOID lpParam);
-extern HANDLE semaforoSecundarioHandle; 
+//extern HANDLE semaforoSecundarioHandle; 
+extern HANDLE hiloSecundarioHandle;
+//extern HANDLE hiloPrincipalHandle;
+
+
 
 #endif

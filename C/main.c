@@ -9,7 +9,10 @@ Estado estadoActualSecundaria;
 Estado estadoAnteriorPrincipal;
 Estado estadoAnteriorSecundaria;
 
-HANDLE semaforoSecundarioHandle;
+//HANDLE hiloPrincipalHandle;
+HANDLE hiloSecundarioHandle;
+
+//HANDLE semaforoSecundarioHandle;
 
 DWORD WINAPI hiloSemaforoPrincipal(LPVOID lpParam) {    
     while (1) {
@@ -28,9 +31,7 @@ DWORD WINAPI hiloSemaforoSecundario(LPVOID lpParam) {
 }
 
 int main() {
-    HANDLE hiloPrincipal, hiloSecundario;
-
-    semaforoSecundarioHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+    HANDLE hiloPrincipal, hiloSecundario;   //pthread_t hiloPrincipal
     
     cambiarSemaforo(&estadoActualPrincipal, 1, 0, 0);
     cambiarSemaforo(&estadoActualSecundaria, 0, 0, 1);
@@ -64,8 +65,12 @@ int main() {
     while(getchar() != '\n');      //limpio el buffer
 
     //crear hilos
-    hiloPrincipal = CreateThread(NULL, 0, hiloSemaforoPrincipal, NULL, 0, NULL);
+    hiloPrincipal = CreateThread(NULL, 0, hiloSemaforoPrincipal, NULL, 0, NULL);    //pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
+
     hiloSecundario = CreateThread(NULL, 0, hiloSemaforoSecundario, NULL, 0, NULL);
+
+    //hiloPrincipalHandle = hiloPrincipal;
+    hiloSecundarioHandle = hiloSecundario;
 
     WaitForSingleObject(hiloPrincipal, INFINITE);
     WaitForSingleObject(hiloSecundario, INFINITE);
@@ -73,7 +78,7 @@ int main() {
     //limpia los hilos
     CloseHandle(hiloPrincipal);
     CloseHandle(hiloSecundario);
-    CloseHandle(semaforoSecundarioHandle);
+    CloseHandle(hiloSecundarioHandle);
 
     return 0;
 }
