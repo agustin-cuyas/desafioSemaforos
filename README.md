@@ -12,7 +12,7 @@ Para desarrollar el desafío, lo primero que hice fue repasar máquinas de estad
    del que viene.
    Luego de solucionar los errores, lo último fue agregar el sensor unos segundo antes que se termine el timepo en verde y solicitar las     duraciones al principio del programa.
 
-   En base a las correcciones, implementé un switch case para eliminar los else if en los semaforos. 
+   En base a las correcciones, implementé un switch case para eliminar los else if en los semaforos. Luego eliminé el loop del main y utilicé un hilo que maneja los semaforos.
 
 ### - Desarrollo en C++:
    En este caso, aproveché las clases para hacer los cambios de estado.
